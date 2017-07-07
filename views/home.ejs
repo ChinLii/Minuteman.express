@@ -37,12 +37,12 @@
                     <!-- for loop here -->
                         <div ng-repeat="item in data.data">
                             <div class="w3-card-4">
-                                <header class="w3-container w3-blue">
-                                    <div class="row">
-                                        <div class="col-md-11"><a href='/minute/{{ item.id }}' > <h3> {{item.title}} </h3></a></div>
-                                        <div class="col-md-1" style="text-align: right">
-                                            <div class="btn-group">
-                                                <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">   
+                                <header class="w3-container" style="background-color: #5D4FB6;">
+                                    <div class="row" >
+                                        <div class="col-md-11" ><a href='/minute/{{ item.id }}' > <h3 style="color:white;"> {{item.title}} </h3></a></div>
+                                        <div class="col-md-1" style="text-align: right;">
+                                            <div class="btn-group" >
+                                                <button class="btn btn-link dropdown-toggle" style="color:white;" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">   
                                                     <i class="fa fa-cog fa-1x" aria-hidden="true" ></i>
                                                 </button>
                                                 <ul class="dropdown-menu">

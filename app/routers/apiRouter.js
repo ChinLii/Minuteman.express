@@ -10,7 +10,7 @@ var TempUser = require('../models/tempUser');
 var RequestNewPassword = require('../models/request');
 var config = require('../../config/database');
 
-var api_key = 'api-key';
+var api_key = 'api_key';
 var domain = 'domainname';
 
 var mailgun = require('mailgun-js')({apiKey: api_key, domain: domain});
@@ -68,8 +68,8 @@ router.post("/signup", function (req, res) {
                 }) */
                 mailgun.messages().send(data, function (error, body) {
                     if (error){
-                        console.log(err);
-                        res.json({ error: true, message: err });
+                        console.log(error);
+                        res.json({ error: true, message: error });
                     }
                     else {
                         console.log("Send the email already");
@@ -185,8 +185,8 @@ router.post("/forgetPass", function (req, res) {
                 }) */
                 mailgun.messages().send(data, function (error, body) {
                     if(error){
-                        console.log(err);
-                        res.json({ error: true, message: err });
+                        console.log(error);
+                        res.json({ error: true, message: error });
                     }else{
                         requestPass.save(function (err) {
                             if (err) {
@@ -375,8 +375,8 @@ router.post('/submit', function (req, res) {
     */
      var data = {
             from : 'confirmation@mg.minuteman.express',
-            to : toEmail.toString(),
-            cc : ccEmail.toString(),
+            to : toEmail.toString() +"," +ccEmail.toString(),
+            //cc : [ccEmail.toString()],
             subject : "[Burda Minute]: " + req.body.title + "  [from : " + req.body.ownerEmail + "]",
             html : html
     }
@@ -392,8 +392,8 @@ router.post('/submit', function (req, res) {
     })*/
     mailgun.messages().send(data, function (error, body) {
         if(error){
-            console.log(err);
-            res.json({ error: true, message: err });
+            console.log(error);
+            res.json({ error: true, message: error });
         }else{
             res.json({ error: false, message: 'Send email already!' });
             html = null;
@@ -551,8 +551,8 @@ router.post('/update/sendMail', function (req, res) {
                         }*/
                         var data = {
                                 from : 'confirmation@mg.minuteman.express',
-                                to : toEmail.toString(),
-                                cc : ccEmail.toString(),
+                                to : toEmail.toString() +"," +ccEmail.toString(),
+                                //cc : [ccEmail.toString()],
                                 subject : "[Burda Minute updated]: " + req.body.title + "  [from : " + req.body.ownerEmail + "] ",
                                 html : html
                         }
@@ -568,8 +568,8 @@ router.post('/update/sendMail', function (req, res) {
                         })*/
                         mailgun.messages().send(data, function (error, body) {
                             if(error){
-                                console.log(err);
-                                res.json({ error: true, message: err });
+                                console.log(error);
+                                res.json({ error: true, message: error });
                             }else{
                                 res.json({ error: false, message: 'Send email already!' });
                                 html = null;
