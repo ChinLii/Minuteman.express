@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title> Minutes Dashboard </title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" href="http://www.w3schools.com/lib/w3.css"/>
+    <link href="/css/metisMenu.min.css" rel="stylesheet"/>
+    <link href="/css/sb-admin-2.css" rel="stylesheet"/>
+    <link href="/css/morris.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://ga-dev-tools.appspot.com/public/css/chartjs-visualizations.css"/>
+    <script src="https://use.fontawesome.com/53d0371c28.js"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default navbar-static-top">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    BurdaMinute.io 
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="/"> Home </a></li>
+                    <li><a href="api/logout"> logout </a></li>
+                    <li>&nbsp;&nbsp;&nbsp;</li>
+                </ul>
+            </div>
+    </nav>
+    <!-- /.row -->
+    <br>
+    <h1 style="margin-left: 8%;"> Report </h1>
+<br><br>
+<div class="row" style="margin-left:8%;margin-right:8%;">
+<%  for(var i=0; i< data.length;i++){ %>
+    <div class="col-lg-3 col-md-6">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <div class="row">
+                    <div class="col-xs-3">
+                        <i class="fa fa-comments fa-5x"></i>
+                    </div>
+                    <div class="col-xs-9 text-right">
+                        <div class="huge">
+                            <%= data[i].count %>
+                        </div>
+                        <div>
+                            <%= data[i]._id %>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a href="#">
+                <div class="panel-footer">
+                    <span class="pull-left">View Details</span>
+                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                    <div class="clearfix"></div>
+                </div>
+            </a>
+        </div>
+    </div>
+    <% } %>
+        </div>
+        <!-- /.row -->
+        <div class="panel panel-default" style="margin-left: 8%;margin-right: 8%;">
+            <div class="panel-heading">
+                <i class="fa fa-bell fa-fw"></i> Notifications Panel
+            </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                <div class="list-group">
+                    <% for(var i=0; i < minute.length ;i++) { %>
+                        <a href="/minute/<%= minute[i].id %>" class="list-group-item">
+                            <i class="fa fa-tasks fa-fw"></i>
+                            <%= minute[i].title %>
+                                <span class="pull-right text-muted small"><em><%= minute[i].createDate %></em>
+                                    </span>
+                        </a>
+                        <% } %>
+                </div>
+                <!-- /.list-group -->
+                <a href="/" class="btn btn-default btn-block">View All Minutes</a>
+            </div>
+            <!-- /.panel-body -->
+        </div>
+        <!-- /.panel -->
+
+        <br>
+        <div style="margin-right: 8%;margin-left:8%;">
+<canvas id="myChart" height='100px'></canvas>
+</div>
+</body>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+<!--  <script src="/js/metisMenu.min.js"></script> -->
+<script src="/js/raphael.min.js"></script>
+<script src="/js/morris.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+<script>
+    
+    var dataSize = <%= data.length %>;
+    var datapull = <%- JSON.stringify(data) %>;
+    var dataset = [];
+    var dataCount = [];
+    
+    for (var i = 0; i < dataSize; i++) {
+        dataset.push(datapull[i]._id);
+        dataCount.push(datapull[i].count);
+    }
+
+    var ctx = document.getElementById("myChart");
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: dataset,
+            datasets: [{
+                label: ['Type of Task'],
+                data: dataCount,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)'
+                ],
+                borderColor: [
+                    'rgba(255,99,132,1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            }
+        }
+    });
+</script>
+
+</html>

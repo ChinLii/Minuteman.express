@@ -1,0 +1,77 @@
+<!doctype html>
+<html ng-app="minuteApp">
+    <head>
+        <title> Burda Minutes </title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+        <link rel="stylesheet" href="/css/w3.css"/>
+        <script src="https://use.fontawesome.com/53d0371c28.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+        <script src="/js/app.js" type="text/javascript"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js"></script>
+    <body>
+    </head>
+    <body>
+        <nav class="navbar navbar-default navbar-static-top" style="background-color: #5D4FB6;">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    <img src='/img/MinuteMan.png' height="40" width="230" style="margin-top:-10px;"/>
+                </a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <p class="navbar-text" style="color:white;">Signed in as <%= user.email %> </p>
+                    <li><a href="api/logout" style="color:white;"> logout </a></li>
+                    <li>&nbsp;&nbsp;&nbsp;</li>
+                </ul>
+            </div>
+        </nav>
+        <div ng-controller="myController">
+            <h2 style="margin-left:8%;margin-top:7%;"> Your meetings </h2>
+            <div class="jumbotron">
+                <div style="margin-left:10%; margin-right:10%;">
+                    <a class="btn btn-default" href="/create" role="button">Create new meeting</a>
+                    <br><br><br>
+                    <div ng-if="data.data.length == 0">
+                        <p> You have no meetings yet. </p>
+                    </div>
+                    <!-- for loop here -->
+                        <div ng-repeat="item in data.data">
+                            <div class="w3-card-4">
+                                <header class="w3-container w3-blue">
+                                    <div class="row">
+                                        <div class="col-md-11"><a href='/minute/{{ item.id }}' > <h3> {{item.title}} </h3></a></div>
+                                        <div class="col-md-1" style="text-align: right">
+                                            <div class="btn-group">
+                                                <button class="btn btn-link dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">   
+                                                    <i class="fa fa-cog fa-1x" aria-hidden="true" ></i>
+                                                </button>
+                                                <ul class="dropdown-menu">
+                                                    <li><a ng-click="deleteMinute(item.id);">Delete</a></li>
+                                                    <li><a href='/minute/{{item.id}}'>Edit</a></li>
+                                                </ul>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </header>
+                                <div class="w3-container">
+                                    <p>{{ item.description }}</p>
+                                </div>
+                                <footer class="w3-container">
+                                    <p style="font-size: 12px;" > {{item.createDate | dateFormat}} </p>
+                                </footer>
+                            </div>
+                            <br>
+                        </div>
+                    
+                </div>
+            </div>
+        </div>
+    
+    </body>   
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+
+</html>

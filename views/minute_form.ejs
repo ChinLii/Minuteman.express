@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Minute of Meetings</title>
+    <link rel "stylesheet" href="https://printjs-4de6.kxcdn.com/print.min.css"/>
+    <!-- Bootstrap Core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" />
+    <script src="https://use.fontawesome.com/53d0371c28.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script   src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"   integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="   crossorigin="anonymous"></script>
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <div id="wrapper">
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Minute</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            Meeting:
+                            <%= data.id %>
+                                <p id="saveText"></p>
+                        </div>
+                        <div class="panel-body">
+                            <p style="font-size: 14px;">
+                                <%= data.createDate %>
+                            </p>
+                            <div class="row">
+                                <div class="col-lg-6">
+                                    <form role="form">
+                                        <div class="form-group">
+                                            <label>Title (or Date)</label>
+                                            <input class="form-control" placeholder="Title (or Date)" id="title" name="title" value="<%= data.title %>">
+                                        </div>
+                                    </form>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <form role="form">
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">Minute Taker</span>
+                                            <input type="text" class="form-control" placeholder="email address" id="minutetaker" name="minutetaker" value="<%= data.ownerEmail %>"
+                                                readonly>
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">Attendees</span>
+                                            <input type="text" class="form-control" placeholder="email addresses" id="attendees" name="attendees" value="<%= data.attendeeEmail %>">
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">Others</span>
+                                            <input type="text" class="form-control" placeholder="email addresses" id="cc" name="cc" value="<%= data.cc %>">
+                                        </div>
+                                        <div class="form-group input-group">
+                                            <span class="input-group-addon">About this meeting</span>
+                                            <input type="text" class="form-control" placeholder="description" id="description" name="description" value="<%= data.description %>">
+                                        </div>
+                                    </form>
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    Topic List
+                                                </div>
+                                                <!-- /.panel-heading -->
+                                                <div class="panel-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-striped" id="tab_logic">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th></th>
+                                                                    <th>Type</th>
+                                                                    <th>Note</th>
+                                                                    <th>Owner</th>
+                                                                    <th>Due</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <%  for(var i=0; i < data.tasks.length ;i++){  %>
+                                                                    <tr id='row<%= i %>'>
+                                                                        <td width="10%">
+                                                                            <input type="text" class="form-control" id="topic<%= i %>" name="topic<%= i %>" value='<%= data.tasks[i].topic %>'>
+                                                                        </td>
+                                                                        <td width="10%">
+                                                                            <% if (data.tasks[i].type === 'todo') { %>
+                                                                                <select class="form-control" id='type<%= i %>'>
+                                                                        <option value="todo" selected>TODO</option>
+                                                                        <option value="done">DONE</option>
+                                                                        <option value="decision">DECISION</option>
+                                                                        <option value="info">INFO</option>
+                                                                        <option value="idea">IDEA</option>
+                                                                        <option value="agenda">AGENDA</option>
+                                                                    </select>
+                                                                                <% } %>
+                                                                                    <% if (data.tasks[i].type === 'done') { %>
+                                                                                        <select class="form-control" id='type<%= i %>'>
+                                                                        <option value="todo">TODO</option>
+                                                                        <option value="done" selected>DONE</option>
+                                                                        <option value="decision">DECISION</option>
+                                                                        <option value="info">INFO</option>
+                                                                        <option value="idea">IDEA</option>
+                                                                        <option value="agenda">AGENDA</option>
+                                                                    </select>
+                                                                                        <% } %>
+                                                                                            <% if (data.tasks[i].type === 'decision') { %>
+                                                                                                <select class="form-control" id='type<%= i %>'>
+                                                                        <option value="todo">TODO</option>
+                                                                        <option value="done" >DONE</option>
+                                                                        <option value="decision" selected>DECISION</option>
+                                                                        <option value="info">INFO</option>
+                                                                        <option value="idea">IDEA</option>
+                                                                        <option value="agenda">AGENDA</option>
+                                                                    </select>
+                                                                                                <% } %>
+                                                                                                    <% if (data.tasks[i].type === 'info') { %>
+                                                                                                        <select class="form-control" id='type<%= i %>'>
+                                                                        <option value="todo">TODO</option>
+                                                                        <option value="done" >DONE</option>
+                                                                        <option value="decision" >DECISION</option>
+                                                                        <option value="info" selected>INFO</option>
+                                                                        <option value="idea">IDEA</option>
+                                                                        <option value="agenda">AGENDA</option>
+                                                                    </select>
+                                                                                                        <% } %>
+                                                                                                            <% if (data.tasks[i].type === 'idea') { %>
+                                                                                                                <select class="form-control" id='type<%= i %>'>
+                                                                        <option value="todo">TODO</option>
+                                                                        <option value="done" >DONE</option>
+                                                                        <option value="decision" >DECISION</option>
+                                                                        <option value="info" >INFO</option>
+                                                                        <option value="idea" selected>IDEA</option>
+                                                                        <option value="agenda">AGENDA</option>
+                                                                    </select>
+                                                                                                                <% } %>
+                                                                                                                    <% if (data.tasks[i].type === 'agenda') { %>
+                                                                                                                        <select class="form-control" id='type<%= i %>'>
+                                                                        <option value="todo">TODO</option>
+                                                                        <option value="done" >DONE</option>
+                                                                        <option value="decision" >DECISION</option>
+                                                                        <option value="info" >INFO</option>
+                                                                        <option value="idea" >IDEA</option>
+                                                                        <option value="agenda" selected>AGENDA</option>
+                                                                    </select>
+                                                                                                                        <% } %>
+                                                                        </td>
+                                                                        <td width="50%">
+                                                                            <textarea class="form-control" id="note<%= i %>" name="note<%= i %>"><%= data.tasks[i].note %></textarea>
+                                                                        </td>
+                                                                        <td width="10%">
+                                                                            <input type="text" class="form-control" id="owner<%= i %>" name="owner<%= i %>" value="<%= data.tasks[i].owner %>">
+                                                                        </td>
+                                                                        <td width="15%">
+                                                                            <div class="row">
+                                                                                <div class="col-md-10"><input class="form-control" type="date" id="duedate<%= i %>"
+                                                                                        name="duedate<%= i %>" value="<%= data.tasks[i].due %>"
+                                                                                    /></div>
+                                                                                <div class="col-md-2"><i class="fa fa-calendar-o" aria-hidden="true"></i></div>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <a href="JavaScript:removeTaskNumber(<%= i %>)"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <% } %>
+                                                                        <tr id="row<%= data.tasks.length %>">
+                                                                        </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <button type="button" class="btn btn-success" onclick="addTask();"><i class="fa fa-plus-circle" aria-hidden="true"></i>Add</button>                                                        <button type="button" class="btn btn-success" onclick="removeTask();"><i class="fa fa-minus-circle" aria-hidden="true"></i>Remove</button>
+                                                    </div>
+                                                    <!-- /.table-responsive -->
+                                                </div>
+                                                <!-- /.panel-body -->
+                                            </div>
+                                            <!-- /.panel -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <button class="btn btn-default" onclick="saveMinute();"><i class="fa fa-floppy-o" aria-hidden="true"></i>Save</button>
+                                    <button class="btn btn-default" onclick="updateMinute();"><i class="fa fa-envelope-o" aria-hidden="true"></i>Send</button>
+                                    <button class="btn btn-default" onclick="printDocument();"><i class="fa fa-print" aria-hidden="true"></i>Print</button>
+                                    <button class="btn btn-default" onclick="cancel();"><i class="fa fa-times" aria-hidden="true" ></i>Cancel</button>
+                                    <button class="btn btn-default" onclick="removeMinute();"><i class="fa fa-trash-o" aria-hidden="true"></i>Delete</button>
+                                </div>
+                            </div>
+                            <!-- /.row (nested) -->
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /#page-wrapper -->
+
+        <div hidden id="printable">
+            <div class="row">
+                <div class="col-md-8">
+                    <h1 style="color: lightgray"> BurdaMinute.io </h1>
+                    <h4> Title:
+                        <%= data.title %>
+                    </h4>
+                    <p> Description:
+                        <%= data.description %>
+                    </p>
+                    <p>
+                        <%= data.createDate %>
+                    </p>
+                </div>
+                <div class="col-md-4">
+                    
+                </div>
+            </div>
+
+            <br><br>
+            <table class="table table-bordered">
+                <tr>
+                    <td style="width:25%; "> Minute taker</td>
+                    <td>
+                        <%= data.ownerEmail %>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:25%;"> Attendees </td>
+                    <td>
+                        <%= data.attendeeEmail %>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="width:25%;"> Others </td>
+                    <td>
+                        <%= data.cc %>
+                    </td>
+                </tr>
+            </table>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Type</th>
+                        <th>Note</th>
+                        <th>Owner</th>
+                        <th>Due</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <%  for(var i=0; i < data.tasks.length ;i++){  %>
+                        <tr id='row<%= i %>'>
+                            <td width="10%">
+                                <p> <%= data.tasks[i].topic %> </p>
+                            </td>
+                            <td width="10%">
+                                <% if (data.tasks[i].type === 'todo') { %>
+                                    <p> TODO </p>    
+                                <% } %>
+                                <% if (data.tasks[i].type === 'done') { %>
+                                    <p> DONE </p>
+                                <% } %>
+                                <% if (data.tasks[i].type === 'decision') { %>
+                                    <p> DECISION </p>
+                                <% } %>
+                                <% if (data.tasks[i].type === 'info') { %>
+                                    <p> INFO </p>
+                                <% } %>
+                                <% if (data.tasks[i].type === 'idea') { %>
+                                    <p> IDEA </p>
+                                <% } %>
+                                <% if (data.tasks[i].type === 'agenda') { %>
+                                    <p> AGENDA </p>
+                                <% } %>
+                            </td>
+                            <td width="50%">
+                                <p> <%= data.tasks[i].note %></p>
+                            </td>
+                            <td width="10%">
+                                <p><%= data.tasks[i].owner %> </p>
+                            </td>
+                            <td width="15%">
+                                <p> <%= data.tasks[i].due %> </p>
+                            </td>
+                        </tr>
+                        <% } %>
+            </table>
+
+
+        </div>
+
+    </div>
+    <script>
+            var taskNumber = <%= data.tasks.length %>;
+            var removelist = [];
+
+            var numberusers = <%- users.length %>;
+            var users = [<%- users %>];
+            var emails = []
+            for(var i=0; i< numberusers ;i++){
+                emails.push(users[i].email);
+            }
+            var index = emails.indexOf('<%- data.ownerEmail %>');
+            if (index >= 0) {
+                emails.splice( index, 1 );
+            }
+                
+                window.setTimeout(function () {
+                    $("textarea").height($("textarea")[0].scrollHeight);
+                }, 1);
+
+                setInterval(function () {
+                    autoSave();
+                }, 50000);
+
+                function autoSave() {
+                    var json = {
+                        id: String,
+                        title: String,
+                        ownerEmail: String,
+                        attendees: String,
+                        cc: String,
+                        description: String,
+                        createDate: Date,
+                        tasks: []
+                    };
+                    json.id = '<%= data.id %>';
+                    json.title = document.getElementById('title').value;
+                    json.description = document.getElementById('description').value;
+                    json.ownerEmail = document.getElementById('minutetaker').value;
+                    json.attendees = document.getElementById('attendees').value;
+                    json.cc = document.getElementById('cc').value;
+                    json.createDate = "<%= data.createDate %>";
+
+                    for (var i = 0; i < taskNumber; i++) {
+                        var task = {
+                            topic: String,
+                            type: String,
+                            note: String,
+                            owner: String,
+                            due: Date
+                        }
+                        if (!removelist.includes(i)) {
+                            task.topic = document.getElementById('topic' + i).value;
+                            task.type = document.getElementById('type' + i).value;
+                            task.note = document.getElementById('note' + i).value;
+                            task.owner = document.getElementById('owner' + i).value;
+                            task.due = document.getElementById('duedate' + i).value;
+                            json.tasks.push(task);
+                        }
+
+                    }
+                    //send data to the server. 
+                    $.post("/api/update", json, function (data, status) {
+                        json = null;
+                        //removelist = null;
+                    });
+
+                }
+                function printDocument() {
+                    //printJS('page-wrapper', 'html')
+                    $(document).ready(function () {
+                        $("#printable").show();
+                        printJS('printable', 'html');
+                        $("#printable").hide();
+                    });
+                    //window.print();
+                }
+                function addTask() {
+                    $('#row' + taskNumber).html("<td width='10%'><input type='text' class='form-control' id='topic" + taskNumber + "' name='topic" + taskNumber + "' value=" + taskNumber + " ></td><td width='10%'><select class='form-control' id='type" + taskNumber + "'><option value='todo'>TODO</option><option value='done'>DONE</option><option value='decision'>DECISION</option><option value='info'>INFO</option><option value='idea'>IDEA</option><option value='agenda'>AGENDA</option></select></td><td width='50%'><textarea class='form-control' rows='2' id='note" + taskNumber + "' name='note" + taskNumber + "'></textarea></td><td width='15%'><input type='text' class='form-control' id='owner" + taskNumber + "' name='owner" + taskNumber + "'> </td><td><div class='row'><div class='col-md-10'><input class='form-control' type='date' name='duedate" + taskNumber + "' id='duedate" + taskNumber + "' id='duedate'" + taskNumber + " /></div><div class='col-md-2'><i class='fa fa-calendar-o' aria-hidden='true'></i></div></div></td><td><a href='JavaScript:removeTaskNumber(" + taskNumber + ")'><i class='fa fa-trash-o' aria-hidden='true'></i></a></td>")
+
+                    $('#tab_logic').append('<tr id="row' + (taskNumber + 1) + '"></tr>');
+
+                    taskNumber++;
+                }
+                function removeTask() {
+                    if (taskNumber > 1) {
+                        $("#row" + (taskNumber - 1)).html('');
+                        taskNumber--;
+                    }
+                }
+                function removeTaskNumber(task) {
+                    removelist.push(task);
+                    $("#row" + task).html('');
+                }
+                function cancel() {
+                    window.location.replace("/");
+                }
+                /*function validateEmail(email) {
+                    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                    return re.test(email);
+                }*/
+                function saveMinute() {
+                    var json = {
+                        id: String,
+                        title: String,
+                        ownerEmail: String,
+                        attendees: String,
+                        cc: String,
+                        description: String,
+                        createDate: Date,
+                        tasks: []
+                    };
+                    json.id = '<%= data.id %>';
+                    json.title = document.getElementById('title').value;
+                    json.description = document.getElementById('description').value;
+                    json.ownerEmail = document.getElementById('minutetaker').value;
+                    json.attendees = document.getElementById('attendees').value;
+                    json.cc = document.getElementById('cc').value;
+                    json.createDate = "<%= data.createDate %>";
+
+                    for (var i = 0; i < taskNumber; i++) {
+                        var task = {
+                            topic: String,
+                            type: String,
+                            note: String,
+                            owner: String,
+                            due: Date
+                        }
+                        if (!removelist.includes(i)) {
+                            task.topic = document.getElementById('topic' + i).value;
+                            task.type = document.getElementById('type' + i).value;
+                            task.note = document.getElementById('note' + i).value;
+                            task.owner = document.getElementById('owner' + i).value;
+                            task.due = document.getElementById('duedate' + i).value;
+                            json.tasks.push(task);
+                        }
+
+                    }
+                    //send data to the server. 
+                    $.post("/api/update", json, function (data, status) {
+                        json = null;
+                        //removelist = null;
+                    });
+
+                    window.location.replace("/minute/"+"<%-data.id%>");
+                    alert('Minute already updated');
+                }
+                function removeMinute() {
+                    var res = confirm("Do you want to DELETE this minute ?");
+                    if(res == true){
+                    var json = {
+                        id: String
+                    }
+                    json.id = '<%= data.id %>';
+                    $.post("/api/delete", json, function (data, status) {
+                        json = null;
+                        alert(data.message);
+                        window.location.replace("/");
+                    });
+                    }else{
+                        
+                    }
+                }
+                function updateMinute() {
+                    var json = {
+                        id: String,
+                        title: String,
+                        ownerEmail: String,
+                        attendees: String,
+                        cc: String,
+                        description: String,
+                        createDate: Date,
+                        tasks: []
+                    };
+                    json.id = '<%= data.id %>';
+                    //get the value into json file
+                    json.title = document.getElementById('title').value;
+                    json.description = document.getElementById('description').value;
+                    json.ownerEmail = document.getElementById('minutetaker').value;
+                    json.attendees = document.getElementById('attendees').value;
+                    json.cc = document.getElementById('cc').value;
+                    json.createDate = "<%= data.createDate %>";
+
+                    for (var i = 0; i < taskNumber; i++) {
+                        var task = {
+                            topic: String,
+                            type: String,
+                            note: String,
+                            owner: String,
+                            due: Date
+                        }
+                        if (!removelist.includes(i)) {
+                            task.topic = document.getElementById('topic' + i).value;
+                            task.type = document.getElementById('type' + i).value;
+                            task.note = document.getElementById('note' + i).value;
+                            task.owner = document.getElementById('owner' + i).value;
+                            task.due = document.getElementById('duedate' + i).value;
+                            json.tasks.push(task);
+                        }
+
+                    }
+                    //send data to the server. 
+                    $.post("/api/update/sendMail", json, function (data, status) {
+                        json = null;
+                        //removelist = null;
+                    });
+                    window.location.replace("/minute/"+"<%-data.id%>");
+                    alert('Minute already updated and send email');
+
+
+                }
+                $(function() {
+                function split( val ) {
+                    return val.split( /,\s*/ );
+                }
+                function extractLast( term ) {
+                    return split( term ).pop();
+                }
+                $( "#attendees" )
+                // don't navigate away from the field on tab when selecting an item
+                .bind( "keydown", function( event ) {
+                    if ( event.keyCode === $.ui.keyCode.TAB &&
+                    $( this ).autocomplete( "instance" ).menu.active ) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                    minLength: 0,
+                    source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    response( $.ui.autocomplete.filter(
+                    emails, extractLast( request.term ) ) );
+                    },
+                    //    source:projects,    
+                    focus: function() {
+                    // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
+                });
+
+                $( "#cc" )
+                // don't navigate away from the field on tab when selecting an item
+                .bind( "keydown", function( event ) {
+                    if ( event.keyCode === $.ui.keyCode.TAB &&
+                    $( this ).autocomplete( "instance" ).menu.active ) {
+                        event.preventDefault();
+                    }
+                })
+                .autocomplete({
+                    minLength: 0,
+                    source: function( request, response ) {
+                    // delegate back to autocomplete, but extract the last term
+                    response( $.ui.autocomplete.filter(
+                    emails, extractLast( request.term ) ) );
+                    },
+                    //    source:projects,    
+                    focus: function() {
+                    // prevent value inserted on focus
+                        return false;
+                    },
+                    select: function( event, ui ) {
+                        var terms = split( this.value );
+                        // remove the current input
+                        terms.pop();
+                        // add the selected item
+                        terms.push( ui.item.value );
+                        // add placeholder to get the comma-and-space at the end
+                        terms.push( "" );
+                        this.value = terms.join( ", " );
+                        return false;
+                    }
+                });
+        });  
+    </script>
+    <!-- /#wrapper -->
+    <script src="https://printjs-4de6.kxcdn.com/print.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script   src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"   integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU="   crossorigin="anonymous"></script>
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
